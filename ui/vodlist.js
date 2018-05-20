@@ -1,11 +1,11 @@
 var base_url = '../archive/';
 
-// Fetch the archive directory listing
+// Fetch the streamer vod directory listing
 function initialize(view) {
   $.get(base_url, null, null, "json")
-  .done( function(listing){
-    console.log( "Got archive listing");
-    var dirs = _.filter(listing, { 'IsDir': true });
+  .done( function(vodlist){
+    console.log( "Got video listing");
+    var dirs = _.filter(vodlist, { 'IsDir': true });
     _.forEach(dirs, function(dir, index) {
       var url = dir.URL;
       if( _.startsWith( url, './' ) ) url = url.slice(2);
@@ -21,9 +21,9 @@ function initialize(view) {
     });
     view.loading = false;
   } ).fail( function(){
-    console.log( "No archive listing");
+    console.log( "No video listing");
     view.loading = false;
-    view.error = "Archive listing not found";
+    view.error = "Video listing not found";
   } );
 }
 
@@ -31,14 +31,14 @@ function initialize(view) {
 function getVodSubdir(vod) {
   var dirUrl = vod.directory;
   $.get(dirUrl, null, null, "json")
-    .done( function(listing){
+    .done( function(vodlist){
       //console.log( "Got directory listing " + vod.directory);
-      if(!listing) {
+      if(!vodlist) {
         vod.error = "Directory listing failed";
         return;
       }
 
-      var dirs = _.filter(listing, { 'IsDir': true });
+      var dirs = _.filter(vodlist, { 'IsDir': true });
       if(dirs.length == 0)  vod.error = "Directory contained no subdirectories"
       else if(dirs.length > 1)   vod.error = "Directory contained multiple subdirectories"
       else {
@@ -99,8 +99,8 @@ function getVodInfo(vod) {
     } );
 }
 
-var listingApp = new Vue({
-  el: '#listing',
+var vodlistApp = new Vue({
+  el: '#vodlist',
   data: {
     error: null,
     loading: true,
@@ -108,4 +108,4 @@ var listingApp = new Vue({
   }
 });
 
-initialize(listingApp);
+initialize(vodlistApp);
