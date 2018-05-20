@@ -1,6 +1,8 @@
 require 'rest-client'
 require 'json'
 
+task :default => ['test.json']
+
 def each_directory_in(directory, listing)
   dirs = listing.find_all{ |i| i['IsDir'] }
   total = dirs.length
