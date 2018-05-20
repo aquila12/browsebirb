@@ -58,7 +58,7 @@
             <a target="_blank" v-bind:href="vod.url">
               <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
               <div class="card-body" style="min-height: 7rem;">
-                <p target="_blank" v-bind:href="vod.url" class="card-text text-white">
+                <p class="card-text text-white">
                   {{ vod.info['@title'] }}
                 </p>
               </div>
@@ -81,5 +81,53 @@
 
     <!-- App -->
     <script src="vodlist.js"></script>
+
+    <div id="streamerlist" class="container">
+      <div v-if="loading" class="alert alert-info" role="alert">
+        Loading the streamer listing...
+      </div>
+      <div v-if="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <div class="row top-buffer">
+        <div v-for="streamer in streamers" class="col-sm-6 col-md-4 col-lg-3">
+          <div v-if="streamer.error" class="card text-white bg-secondary mb-3">
+            <div class="card-header">Error</div>
+            <div class="card-body">
+              <h5 class="card-title">{{ streamer.error }}</h5>
+              <p class="card-text">The streamer information couldn't be retrieved for {{ streamer.directory }}</p>
+            </div>
+          </div>
+
+          <div v-if="streamer.loading" class="card bg-light mb-3">
+            <div class="card-header">Loading</div>
+            <div class="card-body">
+              <p class="card-text">Retrieving metadata for {{ streamer.directory }}</p>
+            </div>
+          </div>
+
+          <div v-if="streamer.loaded" class="card text-white bg-dark mb-3">
+            <img v-if="streamer.info['@profile_image_url']" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ streamer.info['@display_name'] }}
+              </h5>
+              <p class="card-text text-white">
+                {{ streamer.info['@description'] }}
+              </p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted">
+                {{ streamer.info['@view_count'] }} views
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App -->
+    <script src="streamerlist.js"></script>
   </body>
 </html>

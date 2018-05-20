@@ -1,30 +1,31 @@
 var base_url = '../archive/';
 
 // Fetch the streamer vod directory listing
-function initialize(view) {
+function initializeVods(view) {
   $.get(base_url, null, null, "json")
-  .done( function(vodlist){
-    console.log( "Got video listing");
-    var dirs = _.filter(vodlist, { 'IsDir': true });
-    _.forEach(dirs, function(dir, index) {
-      var url = dir.URL;
-      if( _.startsWith( url, './' ) ) url = url.slice(2);
+    .done( function(vodlist){
+      console.log( "Got video listing");
+      var dirs = _.filter(vodlist, { 'IsDir': true });
+      _.forEach(dirs, function(dir, index) {
+        var url = dir.URL;
+        if( _.startsWith( url, './' ) ) url = url.slice(2);
 
-      var vod = {
-        loading: true,
-        loaded: false,
-        directory: base_url + url
-      };
-      view.vods.push(vod);
+        var vod = {
+          loading: true,
+          loaded: false,
+          directory: base_url + url
+        };
+        view.vods.push(vod);
 
-      getVodSubdir(vod);
+        getVodSubdir(vod);
+      });
+    } ).fail( function(){
+      console.log( "No video listing");
+      view.error = "Video listing not found";
+    } )
+    .always( function(){
+      view.loading = false;
     });
-    view.loading = false;
-  } ).fail( function(){
-    console.log( "No video listing");
-    view.loading = false;
-    view.error = "Video listing not found";
-  } );
 }
 
 // Fetch the subdirectory listing for a vod (so we can find video.json)
@@ -72,7 +73,6 @@ function getVodInfo(vod) {
       }
 
       vod.info = metadata;
-      vod.loading = false;
 
       if(vod.info) {
         var url = vod.info["@thumbnail_url"];
@@ -95,8 +95,10 @@ function getVodInfo(vod) {
     .fail( function(){
       console.log( "No metadata " + vod.metadata);
       vod.error = "Metadata not found";
+    } )
+    .always( function(){
       vod.loading = false;
-    } );
+    });
 }
 
 var vodlistApp = new Vue({
@@ -108,4 +110,4 @@ var vodlistApp = new Vue({
   }
 });
 
-initialize(vodlistApp);
+initializeVods(vodlistApp);
