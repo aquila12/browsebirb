@@ -54,12 +54,14 @@
           </div>
 
           <div v-if="vod.loaded" class="card text-white bg-dark mb-3">
-            <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
-            <div class="card-body" style="min-height: 7rem;">
-              <p class="card-text">
-                {{ vod.info['@title'] }}
-              </p>
-            </div>
+            <a target="_blank" v-bind:href="vod.url">
+              <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
+              <div class="card-body" style="min-height: 7rem;">
+                <p target="_blank" v-bind:href="vod.url" class="card-text text-white">
+                  {{ vod.info['@title'] }}
+                </p>
+              </div>
+            </a>
             <div class="card-footer">
               <small class="text-muted">
                 {{ vod.info['@duration'] }}
