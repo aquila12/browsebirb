@@ -85,7 +85,7 @@ function getVodInfo(vod) {
 
         if(date) {
           var d = moment(date, "YYYY-MM-DD hh:mm:ss UTC");
-          vod.when = d.calendar();
+          vod.when = d.calendar(null, {sameElse: 'Do MMM YYYY'});
           vod.timestamp = d.valueOf();
         }
       }
