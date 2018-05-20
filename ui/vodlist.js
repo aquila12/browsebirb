@@ -1,8 +1,6 @@
-var vods_url = '../archive/';
-
 // Fetch the streamer vod directory listing
 function initializeVods(view) {
-  $.get(vods_url, null, null, "json")
+  $.get(view.base_url, null, null, "json")
     .done( function(vodlist){
       console.log( "Got video listing");
       var dirs = _.filter(vodlist, { 'IsDir': true });
@@ -14,7 +12,7 @@ function initializeVods(view) {
           loading: true,
           loaded: false,
           timestamp: 0,
-          directory: vods_url + url
+          directory: view.base_url + url
         };
         view.vods.push(vod);
 
@@ -109,6 +107,7 @@ var vodlistApp = new Vue({
     error: null,
     loading: true,
     active: false,
+    base_url: '../',
     vods: []
   },
   computed: {
@@ -117,13 +116,13 @@ var vodlistApp = new Vue({
     }
   },
   methods: {
-    fetch: function(streamername) {
+    fetch: function(directory) {
       this.loading = true;
       this.active = true;
       this.vods = [];
       this.error = null;
+      this.base_url = directory
 
-      // TODO: Wire up the streamer to drive the vods_url
       initializeVods(this);
     }
   }

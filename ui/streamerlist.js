@@ -1,4 +1,4 @@
-var streamers_url = '../streamers/';
+var streamers_url = '../archive/';
 
 // Fetch the streamer directory listing
 function initializeStreamers(view) {
@@ -73,7 +73,7 @@ var streamerlistApp = new Vue({
     select: function(streamer) {
       if(streamer.name) {
         navApp.streamer = streamer.name;
-        vodlistApp.fetch(streamer.name);
+        vodlistApp.fetch(streamer.directory);
         this.active = false;
       }
     }
