@@ -61,11 +61,21 @@ var streamerlistApp = new Vue({
   data: {
     error: null,
     loading: true,
-    streamers: []
+    streamers: [],
+    active: true,
   },
   computed: {
     sortedStreamers: function() {
       return _.sortBy(this.streamers, 'name');
+    }
+  },
+  methods: {
+    select: function(streamer) {
+      if(streamer.name) {
+        navApp.streamer = streamer.name;
+        vodlistApp.fetch(streamer.name);
+        this.active = false;
+      }
     }
   }
 });
