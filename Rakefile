@@ -18,19 +18,26 @@ task 'test.json' do
   raise 'No username (user) supplied for xeago' unless ENV['user']
   raise 'No password (pass) supplied for xeago' unless ENV['pass']
 
-  archive = RestClient::Resource.new 'https://se.xeago.nl/for/lara6683/and/birbs/archive', ENV['user'], ENV['pass']
+  archive = RestClient::Resource.new 'https://se.xeago.nl/twitch.tv/archive/', ENV['user'], ENV['pass']
 
   map['/'] = JSON.parse archive['/'].get( accept: :json )
 
-  each_directory_in '/', map['/'] do |subdir, n, total|
-    STDERR.puts "Traversing #{subdir} (#{n+1}/#{total})"
-    map[subdir] = JSON.parse archive[subdir].get( accept: :json )
+  each_directory_in '/', map['/'] do |streamerdir, n, total|
+    STDERR.puts "Loading streams from #{streamerdir} (#{n+1}/#{total})"
+    map[streamerdir] = JSON.parse archive[streamerdir].get( accept: :json )
+    map[streamerdir + 'streamer.json'] = JSON.parse archive[streamerdir + 'streamer.json'].get
 
-    # There should be only one!
-    each_directory_in subdir, map[subdir] do |videodir|
-      map[videodir + 'video.json'] = JSON.parse archive[videodir + 'video.json'].get
+    each_directory_in streamerdir, map[streamerdir] do |subdir, n, total|
+      STDERR.puts "Traversing #{subdir} (#{n+1}/#{total})"
+      map[subdir] = JSON.parse archive[subdir].get( accept: :json )
+
+      # There should be only one!
+      each_directory_in subdir, map[subdir] do |videodir|
+        map[videodir + 'video.json'] = JSON.parse archive[videodir + 'video.json'].get
+      end
     end
   end
+
 
   STDERR.puts 'Map contents:'
   STDERR.puts map.keys.map{ |k| '  ' + k }

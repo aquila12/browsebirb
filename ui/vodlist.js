@@ -1,44 +1,44 @@
-var base_url = '../archive/';
+// Fetch the streamer vod directory listing
+function initializeVods(view) {
+  $.get(view.base_url, null, null, "json")
+    .done( function(vodlist){
+      console.log( "Got video listing");
+      var dirs = _.filter(vodlist, { 'IsDir': true });
+      _.forEach(dirs, function(dir, index) {
+        var url = dir.URL;
+        if( _.startsWith( url, './' ) ) url = url.slice(2);
 
-// Fetch the archive directory listing
-function initialize(view) {
-  $.get(base_url, null, null, "json")
-  .done( function(listing){
-    console.log( "Got archive listing");
-    var dirs = _.filter(listing, { 'IsDir': true });
-    _.forEach(dirs, function(dir, index) {
-      var url = dir.URL;
-      if( _.startsWith( url, './' ) ) url = url.slice(2);
+        var vod = {
+          loading: true,
+          loaded: false,
+          timestamp: 0,
+          directory: view.base_url + url
+        };
+        view.vods.push(vod);
 
-      var vod = {
-        loading: true,
-        loaded: false,
-        directory: base_url + url
-      };
-      view.vods.push(vod);
-
-      getVodSubdir(vod);
+        getVodSubdir(vod);
+      });
+    } ).fail( function(){
+      console.log( "No video listing");
+      view.error = "Video listing not found";
+    } )
+    .always( function(){
+      view.loading = false;
     });
-    view.loading = false;
-  } ).fail( function(){
-    console.log( "No archive listing");
-    view.loading = false;
-    view.error = "Archive listing not found";
-  } );
 }
 
 // Fetch the subdirectory listing for a vod (so we can find video.json)
 function getVodSubdir(vod) {
   var dirUrl = vod.directory;
   $.get(dirUrl, null, null, "json")
-    .done( function(listing){
+    .done( function(vodlist){
       //console.log( "Got directory listing " + vod.directory);
-      if(!listing) {
+      if(!vodlist) {
         vod.error = "Directory listing failed";
         return;
       }
 
-      var dirs = _.filter(listing, { 'IsDir': true });
+      var dirs = _.filter(vodlist, { 'IsDir': true });
       if(dirs.length == 0)  vod.error = "Directory contained no subdirectories"
       else if(dirs.length > 1)   vod.error = "Directory contained multiple subdirectories"
       else {
@@ -72,7 +72,6 @@ function getVodInfo(vod) {
       }
 
       vod.info = metadata;
-      vod.loading = false;
 
       if(vod.info) {
         var url = vod.info["@thumbnail_url"];
@@ -87,6 +86,7 @@ function getVodInfo(vod) {
         if(date) {
           var d = moment(date, "YYYY-MM-DD hh:mm:ss UTC");
           vod.when = d.calendar();
+          vod.timestamp = d.valueOf();
         }
       }
 
@@ -95,17 +95,35 @@ function getVodInfo(vod) {
     .fail( function(){
       console.log( "No metadata " + vod.metadata);
       vod.error = "Metadata not found";
+    } )
+    .always( function(){
       vod.loading = false;
-    } );
+    });
 }
 
-var listingApp = new Vue({
-  el: '#listing',
+var vodlistApp = new Vue({
+  el: '#vodlist',
   data: {
     error: null,
     loading: true,
+    active: false,
+    base_url: '../',
     vods: []
+  },
+  computed: {
+    sortedVods: function() {
+      return _.sortBy(this.vods, 'timestamp').reverse();
+    }
+  },
+  methods: {
+    fetch: function(directory) {
+      this.loading = true;
+      this.active = true;
+      this.vods = [];
+      this.error = null;
+      this.base_url = directory
+
+      initializeVods(this);
+    }
   }
 });
-
-initialize(listingApp);
