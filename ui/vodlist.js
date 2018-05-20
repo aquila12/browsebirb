@@ -13,6 +13,7 @@ function initializeVods(view) {
         var vod = {
           loading: true,
           loaded: false,
+          timestamp: 0,
           directory: base_url + url
         };
         view.vods.push(vod);
@@ -87,6 +88,7 @@ function getVodInfo(vod) {
         if(date) {
           var d = moment(date, "YYYY-MM-DD hh:mm:ss UTC");
           vod.when = d.calendar();
+          vod.timestamp = d.valueOf();
         }
       }
 
@@ -107,6 +109,11 @@ var vodlistApp = new Vue({
     error: null,
     loading: true,
     vods: []
+  },
+  computed: {
+    sortedVods: function() {
+      return _.sortBy(this.vods, 'timestamp').reverse();
+    }
   }
 });
 

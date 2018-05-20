@@ -38,7 +38,7 @@
       </div>
 
       <div class="row top-buffer">
-        <div v-for="vod in vods" class="col-sm-6 col-md-4 col-lg-3">
+        <div v-for="vod in sortedVods" class="col-sm-6 col-md-4 col-lg-3">
           <div v-if="vod.error" class="card text-white bg-secondary mb-3">
             <div class="card-header">Error</div>
             <div class="card-body">
@@ -91,7 +91,7 @@
       </div>
 
       <div class="row top-buffer">
-        <div v-for="streamer in streamers" class="col-sm-6 col-md-4 col-lg-3">
+        <div v-for="streamer in sortedStreamers" class="col-sm-6 col-md-4 col-lg-3">
           <div v-if="streamer.error" class="card text-white bg-secondary mb-3">
             <div class="card-header">Error</div>
             <div class="card-body">
@@ -108,7 +108,7 @@
           </div>
 
           <div v-if="streamer.loaded" class="card text-white bg-dark mb-3">
-            <img v-if="streamer.info['@profile_image_url']" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
+            <img v-if="streamer.info['@profile_image_url']" class="card-img-top" v-bind:src="streamer.info['@profile_image_url']" alt="Thumbnail">
             <div class="card-body">
               <h5 class="card-title">
                 {{ streamer.info['@display_name'] }}
@@ -116,8 +116,6 @@
               <p class="card-text text-white">
                 {{ streamer.info['@description'] }}
               </p>
-            </div>
-            <div class="card-footer">
               <small class="text-muted">
                 {{ streamer.info['@view_count'] }} views
               </small>
