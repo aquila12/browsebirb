@@ -46,6 +46,7 @@ function getVodSubdir(vod) {
         if( _.startsWith( url, './' ) ) url = url.slice(2);
 
         var dataDir = dirUrl +  url;
+        vod.subdirectory = dataDir;
         vod.metadata = dataDir + 'video.json';
         vod.url      = dataDir + 'index.m3u8';
         getVodInfo(vod);
