@@ -172,5 +172,18 @@
     <script src="vodplayer.js"></script>
     <script src="vodlist.js"></script>
     <script src="streamerlist.js"></script>
+
+    <div id="info" class="container px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <small class="text-muted">
+        <a href="https://github.com/aquila12/browsebirb">github.com/aquila12/browsebirb</a>
+        ·
+        Provided under the MIT License
+        ·
+        Hosted by <a v-bind:href="owner.url">{{ owner.displayName }}</a>
+      </small>
+    </div>
+
+    <script src="info.js"></script>
+    <script src="owner-info.js"></script>
   </body>
 </html>
