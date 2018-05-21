@@ -15,6 +15,7 @@ There are a bunch of JavaScript/CSS dependencies, which are fetched from CDN:
 - lodash
 - moment.js
 - jQuery
+- hls.js
 
 ## Testing
 There's a basic Sinatra application for testing stuff.  Use `bundle install` if you want to use this utility, and then `user=<user> pass=<pass> rake test.json` to generate a realistic test file.
