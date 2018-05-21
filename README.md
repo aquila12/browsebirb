@@ -2,7 +2,9 @@
 Simple website browser to show video thumbnails and information
 
 ## Deployment
-Just deploy the ui directory to your system - the application expects ui/ to sit at the same level as archive/.
+Just deploy the ui directory to your system - the application expects ui/ to sit at the same level as archive/, which should contain individual streamer directories containing a streamer.json each.  Within those, it expects stream directories each with a single subdirectory containing all the .ts files, the video.json and index.m3u8.
+
+The application currently depends on the Caddy web server or something that produces compatible JSON directory listings.
 
 There's no login handling; the application expects the web server and browser to deal with that itself.
 
