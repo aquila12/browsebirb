@@ -116,14 +116,18 @@ var vodlistApp = new Vue({
     }
   },
   methods: {
-    fetch: function(directory) {
+    fetch: function(streamer) {
       this.loading = true;
       this.active = true;
       this.vods = [];
       this.error = null;
-      this.base_url = directory
+      this.base_url = streamer.directory;
+      this.streamer = streamer;
 
       initializeVods(this);
+    },
+    play: function(vod) {
+      vodplayerApp.playVod(vod, this.streamer);
     }
   }
 });

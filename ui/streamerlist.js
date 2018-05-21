@@ -73,7 +73,7 @@ var streamerlistApp = new Vue({
     select: function(streamer) {
       if(streamer.name) {
         navApp.streamer = streamer.name;
-        vodlistApp.fetch(streamer.directory);
+        vodlistApp.fetch(streamer);
         this.active = false;
       }
     }
