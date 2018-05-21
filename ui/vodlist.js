@@ -78,9 +78,14 @@ function getVodInfo(vod) {
         var date = vod.info["@published_at"];
 
         if(url) {
-          url = _.replace(url, '%{width}', '286');
-          url = _.replace(url, '%{height}', '180');
-          vod.thumbnail = url;
+          var thumburl     = url;
+          var posterurl = url;
+          thumburl = _.replace(thumburl, '%{width}', '286');
+          thumburl = _.replace(thumburl, '%{height}', '180');
+          posterurl = _.replace(posterurl, '%{width}', '1280');
+          posterurl = _.replace(posterurl, '%{height}', '720');
+          vod.thumbnail = thumburl;
+          vod.poster = posterurl;
         }
 
         if(date) {

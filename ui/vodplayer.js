@@ -4,8 +4,8 @@ var vodplayerApp = new Vue({
     active: false,
     loaded: false,
     error: null,
-    vod: null,
-    streamer: null,
+    vod: {info:{}},
+    streamer: {info:{}},
     url: "#",
   },
   methods: {
@@ -16,7 +16,8 @@ var vodplayerApp = new Vue({
       this.streamer = streamer;
       this.url = vod.url;
 
-      var video = this.$refs.video;
+      var video = vodplayerApp.$refs.video;
+      video.poster = vod.poster;
 
       if(Hls.isSupported()) {
         var hls = new Hls();
@@ -58,8 +59,8 @@ var vodplayerApp = new Vue({
       this.loaded = false;
       this.url = "#";
 
-      this.vod = null;
-      this.streamer = null;
+      this.vod = {info:{}};
+      this.streamer = {info:{}};
     }
   }
 });

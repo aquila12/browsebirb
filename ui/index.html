@@ -32,12 +32,12 @@
       <h1>BrowseBirb VOD Browser</h1>
     </div>
 
-    <div id="vodplayer" v-if="active" class="container">
+    <div id="vodplayer" v-show="active" class="container">
       <div v-if="error" class="alert alert-danger" role="alert">
         {{ error }} · Download or report this <a target="_blank" v-bind:href="url">index.m3u8</a>
       </div>
 
-      <div v-if="loaded" class="card text-white bg-dark mb-3">
+      <div v-show="loaded" class="card text-white bg-dark mb-3">
         <div class="card-header">
           {{ vod.info['@title'] }}
           <button v-on:click="close" type="button" class="close" aria-label="Close">
