@@ -56,6 +56,8 @@
             {{ vod.when }}
             ·
             <a target="_blank" v-bind:href="url">index.m3u8</a>
+            ·
+            <a target="_blank" v-bind:href="vod.info['@url']">Watch on Twitch</a>
           </small>
         </div>
       </div>
@@ -110,7 +112,7 @@
                 <br>
                 {{ vod.when }}
                 <br>
-                <a href="#" v-on:click="play(vod)" class="card-link">Stream</a>
+                <a target="_blank" v-bind:href="vod.info['@url']" class="card-link">Twitch</a>
                 <a target="_blank" v-bind:href="vod.subdirectory" class="card-link">Browse</a>
                 <a target="_blank" v-bind:href="vod.metadata" class="card-link">Metadata</a>
               </small>
