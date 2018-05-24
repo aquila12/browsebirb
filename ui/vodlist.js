@@ -89,8 +89,8 @@ function getVodInfo(vod) {
         }
 
         if(date) {
-          var d = moment(date, "YYYY-MM-DD hh:mm:ss UTC");
-          vod.when = d.calendar(null, {sameElse: 'Do MMM YYYY'});
+          var d = moment.utc(date, "YYYY-MM-DD hh:mm:ss");
+          vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
           vod.timestamp = d.valueOf();
         }
       }
