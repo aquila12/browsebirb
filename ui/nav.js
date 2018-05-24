@@ -8,6 +8,9 @@ var navApp = new Vue({
       this.streamer = null;
       streamerlistApp.active = true;
       vodlistApp.active = false;
+
+      // Invoke the loader when we go back to the top
+      reloadData();
     }
   }
 });
