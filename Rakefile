@@ -3,41 +3,27 @@ require 'json'
 
 task :default => ['test.json']
 
-def each_directory_in(directory, listing)
-  dirs = listing.find_all{ |i| i['IsDir'] }
-  total = dirs.length
-  dirs.each_with_index do |i,n|
-    path = directory + i['URL'].sub(/^.\//, '')
-    yield path, n, total
-  end
-end
-
 task 'test.json' do
   map = {}
 
   raise 'No username (user) supplied for xeago' unless ENV['user']
   raise 'No password (pass) supplied for xeago' unless ENV['pass']
 
-  archive = RestClient::Resource.new 'https://se.xeago.nl/twitch.tv/archive/', ENV['user'], ENV['pass']
+  archive = RestClient::Resource.new 'https://se.xeago.nl/twitch.tv/', ENV['user'], ENV['pass']
 
-  map['/'] = JSON.parse archive['/'].get( accept: :json )
+  index_url = 'archive/vods.json'
+  map[index_url] = JSON.parse archive[index_url].get( accept: :json )
 
-  each_directory_in '/', map['/'] do |streamerdir, n, total|
-    STDERR.puts "Loading streams from #{streamerdir} (#{n+1}/#{total})"
-    map[streamerdir] = JSON.parse archive[streamerdir].get( accept: :json )
-    map[streamerdir + 'streamer.json'] = JSON.parse archive[streamerdir + 'streamer.json'].get
+  # Get all the metadata files
+  map[index_url].each do |streamer, vods|
+    streamer_url = "archive/#{streamer}/streamer.json"
+    map[streamer_url] = JSON.parse archive[streamer_url].get( accept: :json )
 
-    each_directory_in streamerdir, map[streamerdir] do |subdir, n, total|
-      STDERR.puts "Traversing #{subdir} (#{n+1}/#{total})"
-      map[subdir] = JSON.parse archive[subdir].get( accept: :json )
-
-      # There should be only one!
-      each_directory_in subdir, map[subdir] do |videodir|
-        map[videodir + 'video.json'] = JSON.parse archive[videodir + 'video.json'].get
-      end
+    vods.each do |vod|
+      vod_url = "archive/#{vod['video']}/video.json"
+      map[vod_url] = JSON.parse archive[vod_url].get( accept: :json )
     end
   end
-
 
   STDERR.puts 'Map contents:'
   STDERR.puts map.keys.map{ |k| '  ' + k }

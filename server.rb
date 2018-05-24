@@ -13,7 +13,7 @@ end
 # Set up the paths needed (don't you just love metaprogramming?)
 JSON.parse(File.read('test.json')).each do |path, object|
   data = JSON.pretty_generate(object)
-  get('/archive' + path) do
+  get('/' + path) do
     content_type 'application/json'
     data
   end
