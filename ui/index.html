@@ -57,7 +57,7 @@
             ·
             <a target="_blank" v-bind:href="url">index.m3u8</a>
             ·
-            <a target="_blank" v-bind:href="vod.info['@url']">Watch on Twitch</a>
+            <a target="_blank" v-bind:href="vod.twitch">Watch on Twitch</a>
           </small>
         </div>
       </div>
@@ -98,7 +98,7 @@
           </div>
 
           <div v-if="vod.loaded" class="card text-white bg-dark mb-3">
-            <a href="#" v-on:click="play(vod)">
+            <a v-bind:href="vod.href" v-bind:target="vod.target" v-on:click="play(vod)">
               <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
               <div class="card-body" style="min-height: 7rem;">
                 <p class="card-text text-white">
@@ -107,12 +107,13 @@
               </div>
             </a>
             <div class="card-footer">
+              <span v-if="!vod.playable" class="badge badge-danger float-right">Twitch Only</span>
               <small class="text-muted">
                 {{ vod.info['@duration'] }}
                 <br>
                 {{ vod.when }}
                 <br>
-                <a target="_blank" v-bind:href="vod.info['@url']" class="card-link">Twitch</a>
+                <a target="_blank" v-bind:href="vod.twitch" class="card-link">Twitch</a>
                 <a target="_blank" v-bind:href="vod.subdirectory" class="card-link">Browse</a>
                 <a target="_blank" v-bind:href="vod.metadata" class="card-link">Metadata</a>
               </small>
