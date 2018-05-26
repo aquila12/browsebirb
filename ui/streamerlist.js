@@ -45,11 +45,11 @@ var streamerlistApp = new Vue({
         var url = base_url + dir + '/';
 
         var streamer = {
-          loading: true,
-          loaded: false,
-          name: "",
+          loading:   true,
+          loaded:    false,
+          name:      dir, // Quick name (in case of errors)
           directory: url,
-          metadata: url + 'streamer.json'
+          metadata:  url + 'streamer.json'
         };
         view.streamers.push(streamer);
 
