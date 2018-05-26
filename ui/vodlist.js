@@ -98,11 +98,7 @@ var vodlistApp = new Vue({
       });
     },
     play: function(vod) {
-      if(vod.playable) {
-        vodplayerApp.playVod(vod, this.streamer);
-      } else {
-
-      }
+      if(vod.playable) vodplayerApp.playVod(vod, this.streamer);
     }
   }
 });
