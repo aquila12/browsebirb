@@ -87,7 +87,6 @@ var vodlistApp = new Vue({
           loading: true,
           loaded: false,
           timestamp: 0,
-          subdirectory: archive_url + video.video + '/',
           playable:     video.source ? true : false,
           url:          archive_url + video.source,
           metadata:     archive_url + video.meta,
