@@ -87,10 +87,10 @@ var vodlistApp = new Vue({
           loading: true,
           loaded: false,
           timestamp: 0,
-          playable:     video.playable,
           subdirectory: archive_url + video.video + '/',
-          url:          archive_url + video.video + '/index.m3u8',
-          metadata:     archive_url + video.video + '/video.json',
+          playable:     video.source ? true : false,
+          url:          archive_url + video.source,
+          metadata:     archive_url + video.meta,
           href:   "#",
           target: ""
         };
