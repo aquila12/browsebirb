@@ -82,7 +82,6 @@ var vodlistApp = new Vue({
       var streamer_key = streamer.info['@display_name']
       var videos = this.index[streamer_key];
       _.forEach(videos, function(video) {
-        var dir = _.replace(video.video, /video\.json$/, '');
         var vod = {
           loading: true,
           loaded: false,
