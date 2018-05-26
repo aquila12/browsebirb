@@ -86,14 +86,14 @@
             <div class="card-header">Error</div>
             <div class="card-body">
               <h5 class="card-title">{{ vod.error }}</h5>
-              <p class="card-text">The VOD information couldn't be retrieved for {{ vod.directory }}</p>
+              <p class="card-text">The VOD information couldn't be retrieved.</p>
             </div>
           </div>
 
           <div v-if="vod.loading" class="card bg-light mb-3">
             <div class="card-header">Loading</div>
             <div class="card-body">
-              <p class="card-text">Retrieving metadata for {{ vod.directory }}</p>
+              <p class="card-text">Retrieving metadata for VOD</p>
             </div>
           </div>
 
