@@ -2,15 +2,17 @@
 Simple website browser to show video thumbnails and information
 
 ## Deployment
-Just deploy the ui directory to your system - the application expects ui/ to sit at the same level as archive/, which should contain individual streamer directories containing a streamer.json each.  There should be a top-level vods.json within archive/, which should list all of the videos by all streamers.  The current expected format is:
+Just deploy the ui directory to your system - the application expects ui/ to sit at the same level as archive/, which should contain individual streamer directories containing a streamer.json each.  There should be a top-level vods.json within archive/, which should list all of the videos by all streamers.  The current expected format is matched from [xeago/twitch.rb](https://github.com/Xeago/twitch.rb#format):
 ```
 {
   "streamer_name": [
     {
+      "meta": "relative/path/to/video.json",
+      "video": "relative/path/to/",
+      "playable": true,
       "source": "relative/path/to/index.m3u8",
-      "meta": "relative/path/to/video.json"
     },
-    ...
+//  ...
   ]
 }
 ```
