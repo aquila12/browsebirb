@@ -12,7 +12,7 @@ function initVod(video) {
     url:          archive_url + video.source,
     metadataUrl:  archive_url + video.meta, // Deprecated
     info:         video.twitch,
-    href:         video.playable? "#" : video.info['@url'],
+    href:         video.playable? "#" : video.twitch['@url'],
     target:       video.playable? ''  : '_blank',
   };
 
@@ -29,6 +29,8 @@ function initVod(video) {
     vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
     vod.timestamp = d.valueOf();
   }
+
+  return vod;
 }
 
 var vodlistApp = new Vue({
@@ -61,9 +63,7 @@ var vodlistApp = new Vue({
       var streamer_key = streamer.info['@display_name']
       var videos = this.index[streamer_key];
       _.forEach(videos, function(video) {
-        initVod(video);
-
-        view.vods.push(vod);
+        view.vods.push( initVod(video) );
       });
     },
     play: function(vod) {
