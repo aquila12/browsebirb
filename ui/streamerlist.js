@@ -1,10 +1,10 @@
 // Fetch the metadata for a streamer from streamer.json
 function getStreamerInfo(streamer) {
-  var metadataUrl = streamer.metadata;
-  //console.log( "Get metadata " + streamer.metadata);
+  var metadataUrl = streamer.metadataUrl;
+  //console.log( "Get metadata " + streamer.metadataUrl);
   $.get(metadataUrl, null, null, "json")
     .done( function(metadata){
-      //console.log( "Got metadata " + streamer.metadata);
+      //console.log( "Got metadata " + streamer.metadataUrl);
       if(!metadata) {
         streamer.error = "Failed to get streamer info";
         return;
@@ -15,7 +15,7 @@ function getStreamerInfo(streamer) {
       streamer.loaded = true;
     } )
     .fail( function(){
-      console.log( "No metadata " + streamer.metadata);
+      console.log( "No metadata " + streamer.metadataUrl);
       streamer.error = "Metadata not found";
     } )
     .always( function(){
@@ -49,7 +49,7 @@ var streamerlistApp = new Vue({
           loaded:    false,
           name:      dir, // Quick name (in case of errors)
           directory: url,
-          metadata:  url + 'streamer.json'
+          metadataUrl:  url + 'streamer.json'
         };
         view.streamers.push(streamer);
 
