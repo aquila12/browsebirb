@@ -5,39 +5,30 @@ function imageUrlFromTemplate(template, width, height) {
   return url;
 }
 
-// Fetch the metadata for a vod from video.json
-function getVodInfo(vod) {
-  if(!vod.info) {
-    vod.error = "No metadata for VOD";
-    return;
+function initVod(video) {
+  var vod = {
+    timestamp: 0,
+    playable:     video.playable,
+    url:          archive_url + video.source,
+    metadataUrl:  archive_url + video.meta, // Deprecated
+    info:         video.twitch,
+    href:         video.playable? "#" : video.info['@url'],
+    target:       video.playable? ''  : '_blank',
+  };
+
+  var url = vod.info["@thumbnail_url"];
+  var date = vod.info["@published_at"];
+
+  if(url) {
+    vod.thumbnail = imageUrlFromTemplate(url, 286,  180);
+    vod.poster    = imageUrlFromTemplate(url, 1280, 720);
   }
 
-  vod.twitch = vod.info['@url'];
-
-  // Unplayable VODs link to twitch
-  if(! vod.playable) {
-    vod.href   = vod.twitch;
-    vod.target = "_blank";
+  if(date) {
+    var d = moment.utc(date, "YYYY-MM-DD hh:mm:ss");
+    vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
+    vod.timestamp = d.valueOf();
   }
-
-  if(vod.info) {
-    var url = vod.info["@thumbnail_url"];
-    var date = vod.info["@published_at"];
-
-    if(url) {
-      vod.thumbnail = imageUrlFromTemplate(url, 286,  180);
-      vod.poster    = imageUrlFromTemplate(url, 1280, 720);
-    }
-
-    if(date) {
-      var d = moment.utc(date, "YYYY-MM-DD hh:mm:ss");
-      vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
-      vod.timestamp = d.valueOf();
-    }
-  }
-
-  vod.loaded = true;
-  vod.loading = false;
 }
 
 var vodlistApp = new Vue({
@@ -70,20 +61,9 @@ var vodlistApp = new Vue({
       var streamer_key = streamer.info['@display_name']
       var videos = this.index[streamer_key];
       _.forEach(videos, function(video) {
-        var vod = {
-          loading: true,
-          loaded: false,
-          timestamp: 0,
-          playable:     video.source ? true : false,
-          url:          archive_url + video.source,
-          metadataUrl:  archive_url + video.meta, // Deprecated
-          info:         video.twitch,
-          href:   "#",
-          target: ""
-        };
+        initVod(video);
 
         view.vods.push(vod);
-        getVodInfo(vod);
       });
     },
     play: function(vod) {
