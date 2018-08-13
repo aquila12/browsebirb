@@ -1,55 +1,36 @@
-// Fetch the metadata for a vod from video.json
-function getVodInfo(vod) {
-  var metadataUrl = vod.metadata;
-  //console.log( "Get metadata " + vod.metadata);
-  $.get(metadataUrl, null, null, "json")
-    .done( function(metadata){
-      //console.log( "Got metadata " + vod.metadata);
-      if(!metadata) {
-        vod.error = "Failed to get metadata";
-        return;
-      }
+function imageUrlFromTemplate(template, width, height) {
+  var url = template;
+  url = _.replace(url, '%{width}',  width.toString());
+  url = _.replace(url, '%{height}', height.toString());
+  return url;
+}
 
-      vod.info   = metadata;
-      vod.twitch = vod.info['@url'];
+function initVod(video) {
+  var vod = {
+    timestamp: 0,
+    playable:     video.playable,
+    url:          archive_url + video.source,
+    metadataUrl:  archive_url + video.meta, // Deprecated
+    info:         video.twitch,
+    href:         video.playable? "#" : video.twitch['@url'],
+    target:       video.playable? ''  : '_blank',
+  };
 
-      // Unplayable VODs link to twitch
-      if(! vod.playable) {
-        vod.href   = vod.twitch;
-        vod.target = "_blank";
-      }
+  var url = vod.info["@thumbnail_url"];
+  var date = vod.info["@published_at"];
 
-      if(vod.info) {
-        var url = vod.info["@thumbnail_url"];
-        var date = vod.info["@published_at"];
+  if(url) {
+    vod.thumbnail = imageUrlFromTemplate(url, 286,  180);
+    vod.poster    = imageUrlFromTemplate(url, 1280, 720);
+  }
 
-        if(url) {
-          var thumburl     = url;
-          var posterurl = url;
-          thumburl = _.replace(thumburl, '%{width}', '286');
-          thumburl = _.replace(thumburl, '%{height}', '180');
-          posterurl = _.replace(posterurl, '%{width}', '1280');
-          posterurl = _.replace(posterurl, '%{height}', '720');
-          vod.thumbnail = thumburl;
-          vod.poster = posterurl;
-        }
+  if(date) {
+    var d = moment.utc(date, "YYYY-MM-DD hh:mm:ss");
+    vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
+    vod.timestamp = d.valueOf();
+  }
 
-        if(date) {
-          var d = moment.utc(date, "YYYY-MM-DD hh:mm:ss");
-          vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
-          vod.timestamp = d.valueOf();
-        }
-      }
-
-      vod.loaded = true;
-    } )
-    .fail( function(){
-      console.log( "No metadata " + vod.metadata);
-      vod.error = "Metadata not found";
-    } )
-    .always( function(){
-      vod.loading = false;
-    });
+  return vod;
 }
 
 var vodlistApp = new Vue({
@@ -82,19 +63,7 @@ var vodlistApp = new Vue({
       var streamer_key = streamer.info['@display_name']
       var videos = this.index[streamer_key];
       _.forEach(videos, function(video) {
-        var vod = {
-          loading: true,
-          loaded: false,
-          timestamp: 0,
-          playable:     video.source ? true : false,
-          url:          archive_url + video.source,
-          metadata:     archive_url + video.meta,
-          href:   "#",
-          target: ""
-        };
-
-        view.vods.push(vod);
-        getVodInfo(vod);
+        view.vods.push( initVod(video) );
       });
     },
     play: function(vod) {

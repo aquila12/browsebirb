@@ -90,14 +90,7 @@
             </div>
           </div>
 
-          <div v-if="vod.loading" class="card bg-light mb-3">
-            <div class="card-header">Loading</div>
-            <div class="card-body">
-              <p class="card-text">Retrieving metadata for VOD</p>
-            </div>
-          </div>
-
-          <div v-if="vod.loaded" class="card text-white bg-dark mb-3">
+          <div class="card text-white bg-dark mb-3">
             <a v-bind:href="vod.href" v-bind:target="vod.target" v-on:click="play(vod)">
               <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
               <div class="card-body" style="min-height: 7rem;">
@@ -114,7 +107,7 @@
                 {{ vod.when }}
                 <br>
                 <a target="_blank" v-bind:href="vod.twitch" class="card-link">Twitch</a>
-                <a target="_blank" v-bind:href="vod.metadata" class="card-link">Metadata</a>
+                <a target="_blank" v-bind:href="vod.metadataUrl" class="card-link">Metadata</a>
               </small>
             </div>
           </div>

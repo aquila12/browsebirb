@@ -19,10 +19,10 @@ task 'test.json' do
     streamer_url = "archive/#{streamer}/streamer.json"
     map[streamer_url] = JSON.parse archive[streamer_url].get( accept: :json )
 
-    vods.each do |vod|
-      vod_url = "archive/#{vod['video']}/video.json"
-      map[vod_url] = JSON.parse archive[vod_url].get( accept: :json )
-    end
+#    vods.each do |vod|
+#      vod_url = "archive/#{vod['video']}/video.json"
+#      map[vod_url] = JSON.parse archive[vod_url].get( accept: :json )
+#    end
   end
 
   STDERR.puts 'Map contents:'
