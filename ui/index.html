@@ -90,17 +90,18 @@
             </div>
           </div>
 
-          <div class="card text-white bg-dark mb-3">
+          <div class="card mb-3" v-bind:class="[vod.textClass, vod.cardClass]">
             <a v-bind:href="vod.href" v-bind:target="vod.target" v-on:click="play(vod)">
               <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
               <div class="card-body" style="min-height: 7rem;">
-                <p class="card-text text-white">
+                <p class="card-text" v-bind:class="[vod.textClass]">
                   {{ vod.info['@title'] }}
                 </p>
               </div>
             </a>
             <div class="card-footer">
               <span v-if="!vod.playable" class="badge badge-danger float-right">Twitch Only</span>
+              <span v-if="vod.highlight" class="badge badge-success float-right">Highlight</span>
               <small class="text-muted">
                 {{ vod.info['@duration'] }}
                 <br>

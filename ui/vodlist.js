@@ -14,6 +14,7 @@ function initVod(video) {
     info:         video.twitch,
     href:         video.playable? "#" : video.twitch['@url'],
     target:       video.playable? ''  : '_blank',
+    highlight:    video.twitch['@type'] == 'highlight'
   };
 
   var url = vod.info["@thumbnail_url"];
@@ -28,6 +29,13 @@ function initVod(video) {
     var d = moment.utc(date, "YYYY-MM-DD hh:mm:ss");
     vod.when = d.local().calendar(null, {sameElse: 'Do MMM YYYY'});
     vod.timestamp = d.valueOf();
+  }
+
+  if(vod.highlight) {
+    vod.cardClass = 'bg-white';
+  } else {
+    vod.cardClass = 'bg-dark';
+    vod.textClass = 'text-white';
   }
 
   return vod;
