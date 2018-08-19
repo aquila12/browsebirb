@@ -31,13 +31,6 @@ function initVod(video) {
     vod.timestamp = d.valueOf();
   }
 
-  if(vod.highlight) {
-    vod.cardClass = 'bg-white';
-  } else {
-    vod.cardClass = 'bg-dark';
-    vod.textClass = 'text-white';
-  }
-
   return vod;
 }
 

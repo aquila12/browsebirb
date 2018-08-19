@@ -90,11 +90,11 @@
             </div>
           </div>
 
-          <div class="card mb-3" v-bind:class="[vod.textClass, vod.cardClass]">
+          <div class="card text-white bg-dark mb-3">
             <a v-bind:href="vod.href" v-bind:target="vod.target" v-on:click="play(vod)">
               <img v-if="vod.thumbnail" class="card-img-top" v-bind:src="vod.thumbnail" alt="Thumbnail">
               <div class="card-body" style="min-height: 7rem;">
-                <p class="card-text" v-bind:class="[vod.textClass]">
+                <p class="card-text text-white">
                   {{ vod.info['@title'] }}
                 </p>
               </div>
