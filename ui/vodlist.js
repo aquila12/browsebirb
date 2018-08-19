@@ -14,6 +14,7 @@ function initVod(video) {
     info:         video.twitch,
     href:         video.playable? "#" : video.twitch['@url'],
     target:       video.playable? ''  : '_blank',
+    highlight:    video.twitch['@type'] == 'highlight'
   };
 
   var url = vod.info["@thumbnail_url"];

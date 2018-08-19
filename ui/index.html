@@ -101,12 +101,13 @@
             </a>
             <div class="card-footer">
               <span v-if="!vod.playable" class="badge badge-danger float-right">Twitch Only</span>
+              <span v-if="vod.highlight" class="badge badge-success float-right">Highlight</span>
               <small class="text-muted">
                 {{ vod.info['@duration'] }}
                 <br>
                 {{ vod.when }}
                 <br>
-                <a target="_blank" v-bind:href="vod.twitch" class="card-link">Twitch</a>
+                <a target="_blank" v-bind:href="vod.info['@url']" class="card-link">Twitch</a>
                 <a target="_blank" v-bind:href="vod.metadataUrl" class="card-link">Metadata</a>
               </small>
             </div>
